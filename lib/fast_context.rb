@@ -1,4 +1,3 @@
-puts "Loading fast_context"
 require 'shoulda/context'
 
 module ShouldaContextExtensions
@@ -27,8 +26,15 @@ end
 
 module Shoulda
   class FastContext < Context
+    def test_method_name
+      joined_should_name = shoulds.collect{ |should_hash| should_hash[:name] }.join(' and ')
+      test_name = ["test", full_name, "should", joined_should_name].flatten.join('_')
+      test_name = test_name.gsub(' ', '_').gsub(/[^a-zA-Z0-9_?!]/, '').gsub(/__+/, '_').to_sym
+      return test_name
+    end
+
     def create_test_from_should_hash
-      test_name = ["test:", full_name, "should", "run_fast"].flatten.join(' ').to_sym
+      test_name = test_method_name
 
       if test_unit_class.instance_methods.include?(test_name.to_s)
         warn "  * WARNING: '#{test_name}' is already defined"
