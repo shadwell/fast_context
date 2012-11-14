@@ -20,12 +20,12 @@ module ShouldaContextExtensions
   end
 
   def am_subcontext_with_fast_context?
-    parent.is_a?(Shoulda::Context) || parent.is_a?(Shoulda::FastContext)
+    parent.is_a?(Shoulda::Context::Context) || parent.is_a?(Shoulda::FastContext)
   end
 end
 
 module Shoulda
-  class FastContext < Context
+  class FastContext < Context::Context
     def test_method_name
       joined_should_name = shoulds.collect{ |should_hash| should_hash[:name] }.join(' and ')
       test_name = ["test", full_name, "should", joined_should_name].flatten.join('_')
@@ -46,9 +46,9 @@ module Shoulda
         @current_should = nil
         begin
           context.run_parent_setup_blocks(self)
-          context.shoulds.each do |s| 
+          context.shoulds.each do |s|
             @current_should = s
-            s[:before].bind(self).call if s[:before] 
+            s[:before].bind(self).call if s[:before]
           end
           context.run_current_setup_blocks(self)
 
@@ -77,13 +77,13 @@ end
 
 class ActiveSupport::TestCase
   def self.fast_context(name, &blk)
-    if Shoulda.current_context
-      Shoulda.current_context.fast_context(name, &blk)
+    if Shoulda::Context.current_context
+      Shoulda::Context.current_context.fast_context(name, &blk)
     else
       context = Shoulda::FastContext.new(name, self, &blk)
       context.build
     end
-  end  
+  end
 end
 
-Shoulda::Context.send :include, ShouldaContextExtensions
+Shoulda::Context::Context.send :include, ShouldaContextExtensions
