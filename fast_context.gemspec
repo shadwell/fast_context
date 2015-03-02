@@ -5,6 +5,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Russo"]
   s.email = %q{ari@paperlesspost.com}
+  s.licenses = ["MIT"]
   s.files = [
     ".gitignore",
      "MIT-LICENSE",
@@ -17,6 +18,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{This is a fork of the fast_context plugin}
+  s.description = %q{This is a fork of the fast_context plugin to allow compatibility with shoulda-context}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
