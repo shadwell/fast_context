@@ -7,7 +7,6 @@ Gem::Specification.new do |s|
   s.email = %q{ari@paperlesspost.com}
   s.licenses = ["MIT"]
   s.files = [
-    ".gitignore",
      "MIT-LICENSE",
      "README.md",
      "VERSION",
