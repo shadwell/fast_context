@@ -53,10 +53,14 @@ module Shoulda
           context.run_current_setup_blocks(self)
 
           context.shoulds.each {|should| should[:block].bind(self).call }
-        rescue Test::Unit::AssertionFailedError => e
-          error = Test::Unit::AssertionFailedError.new(["FAILED:", context.full_name, "should", "#{@current_should[:name]}:", e.message].flatten.join(' '))
-          error.set_backtrace e.backtrace
-          raise error
+        rescue => e
+          if defined?(Test::Unit::AssertionFailedError) && e.kind_of?(Test::Unit::AssertionFailedError)
+            error = Test::Unit::AssertionFailedError.new(["FAILED:", context.full_name, "should", "#{@current_should[:name]}:", e.message].flatten.join(' '))
+            error.set_backtrace e.backtrace
+            raise error
+          else
+            raise e
+          end
         ensure
           context.run_all_teardown_blocks(self)
         end
