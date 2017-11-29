@@ -1,26 +1,19 @@
 require 'shoulda/context'
 
 module ShouldaContextExtensions
-  def self.included(base)
-    base.class_eval do
-      alias_method_chain :build, :fast_context
-      alias_method_chain :am_subcontext?, :fast_context
-    end
-  end
-
   def fast_context(name, &blk)
     @fast_subcontexts ||= []
     @fast_subcontexts << Shoulda::FastContext.new(name, self, &blk)
   end
 
-  def build_with_fast_context
-    build_without_fast_context
+  def build
+    super
     @fast_subcontexts ||= []
     @fast_subcontexts.each {|f| f.build }
   end
 
-  def am_subcontext_with_fast_context?
-    parent.is_a?(Shoulda::Context::Context) || parent.is_a?(Shoulda::FastContext)
+  def am_subcontext?
+    super || parent.is_a?(Shoulda::FastContext)
   end
 end
 
@@ -90,4 +83,4 @@ class ActiveSupport::TestCase
   end
 end
 
-Shoulda::Context::Context.send :include, ShouldaContextExtensions
+Shoulda::Context::Context.send :prepend, ShouldaContextExtensions
