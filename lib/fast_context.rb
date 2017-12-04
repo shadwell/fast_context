@@ -13,7 +13,7 @@ module ShouldaContextExtensions
   end
 
   def am_subcontext?
-    super || parent.is_a?(Shoulda::FastContext)
+    parent.is_a?(Shoulda::Context::Context) || parent.is_a?(Shoulda::FastContext)
   end
 end
 
